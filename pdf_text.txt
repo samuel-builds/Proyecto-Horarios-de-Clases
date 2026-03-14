@@ -1,0 +1,390 @@
+ 
+Facultad de Ingeniería 
+Departamento de Gestión de Proyectos y Sistemas 
+Algoritmos y Programación (BPTSP05) 
+Trimestre: 2526-2 
+ 
+Proyecto: Horarios de Clases 
+ 
+ 
+Figura 1. Proceso manual de programación de horarios usando imanes sobre una pizarra acrílica.​
+Fuente: MagnaTag 
+ 
+Los sistemas desarrollados internamente tienen el potencial de permitir grandes ahorros en 
+costos a la vez de ser mucho más fáciles de controlar y actualizar. Control de Estudios está 
+considerando un sistema de este tipo para planificar la oferta de horarios de cada trimestre. 
+Para evaluar cómo funcionaría, se le pide que desarrolle este sistema y lo pruebe con las 
+listas disponibles en el siguiente repositorio en formato JSON. 
+ 
+https://github.com/FernandoSapient/BPTSP05_2526-2 
+ 
+El programa debe generar una oferta y permitirle al usuario modificarla. Sin embargo, 
+debido a que el programa está en pruebas, esta no debería subirse al repositorio. En su 
+lugar, el usuario deberá tener la opción de guardarla en un archivo CSV, ya que esto permite 
+su visualización rápida con Microsoft Excel. Esto también implica que el programa debe ser 
+capaz de cargar archivos CSV para permitir parar a mitad de la modificación y continuar 
+más tarde. 
+Funcionamiento del programa 
+El programa debe iniciar presentándole al usuario las siguientes opciones: 
+●​ Crear listas en blanco 
+●​ Descargar los datos de la API de Github  
+●​ Cargar un horario en CSV  
+En el primer y segundo caso, se deben mostrar los módulos fundamentales. En el tercer 
+caso, se debe pasar directamente al resultado de generar un horario. 
+Módulos fundamentales 
+El sistema debe constar de 4 módulos fundamentales:  
+1.​ Profesores 
+2.​ Materias 
+3.​ Generación de horarios 
+4.​ Modificación de horarios 
+Opcionalmente, puede tener un quinto módulo que indique estadísticas  
+1. Módulo de Profesores 
+Cada profesor tiene nombre, cédula, correo, número de materias permitidas y la lista de 
+materias que puede dar. El módulo de Profesores debe permitir: 
+●​ Ver la lista de profesores 
+●​ Ver un profesor específico 
+●​ Agregar un profesor a la lista 
+●​ Eliminar un profesor de la lista 
+●​ Modificar la lista de materias de un profesor (agregar o quitar materias) 
+ 
+Nótese que al eliminar profesores o eliminar una materia de la lista de un profesor, puede 
+quedar una materia sin profesores que puedan darla. Si esto ocurre, debe imprimirse un 
+mensaje de advertencia y solicitarle al usuario que confirme la acción. 
+2. Módulo de Materias 
+Cada materia tiene un código, nombre y número de secciones que se deben asignar. El 
+módulo de Materias debe permitir: 
+●​ Ver la lista de materias 
+●​ Ver los detalles de una materia específica 
+●​ Ver los profesores asociados a una materia 
+●​ Agregar una materia a la lista 
+●​ Eliminar una materia de la lista 
+●​ Modificar el número de secciones de la materia 
+ 
+Nótese que si se elimina una materia, deberá eliminarse de las listas de todos los 
+profesores que la tengan. Si esto deja a uno o más profesores sin materias, debe imprimirse 
+un mensaje de advertencia y solicitarle al usuario que confirme la acción. 
+ 
+El número de secciones de una materia puede ser cero: esto se usa para indicar que la 
+materia no se oferta en el trimestre actual. Si se modifica una materia para fijar su número 
+de secciones en cero, debe imprimirse un mensaje de advertencia y solicitarle confirmación 
+al usuario. 
+3. Módulo de Generación de horarios 
+Para cumplir con el requerimiento de Control de Estudios, deberá generar la lista de 
+horarios. Para ello, deberá, primeramente, solicitarle al usuario el número de salones 
+disponibles; esto dará el número máximo de materias que se pueden programar en un 
+mismo bloque horario. (Para las pruebas, puede suponer 30.) 
+ 
+Para asignar los horarios, debe recorrer la lista de materias en orden, asignando a cada 
+una, uno de sus profesores disponibles. Si un profesor ya ha alcanzado su número de 
+materias permitidas, se considera que no está disponible. Si una materia no tiene 
+suficientes profesores disponibles para el número de secciones especificado, debe probarse 
+reasignar una sección de una de las materias actualmente asignadas a ese profesor, a fin 
+de que este vuelva a quedar disponible. Si ninguna puede ser reasignada, la sección se 
+marca como “cerrada”. 
+ 
+Una vez se alcanza el máximo de materias por bloque horario, se debe continuar en el 
+siguiente bloque horario. Note que un mismo profesor no puede estar asignado a dos 
+materias en el mismo bloque horario, aunque no haya alcanzado su número máximo de 
+materias. 
+ 
+Se debe intentar minimizar el número de secciones de la misma materia en el mismo bloque 
+horario. A este fin, debe asignar una sola sección a menos que no haya otros bloques 
+horarios con salones disponibles (es decir, si se llega al final de la lista de bloques horarios 
+posibles, debe volverse a comenzar para asignar las acciones faltantes). 
+ 
+Los bloques horarios permitidos para esta evaluación son: 
+ 
+ 
+Lunes y Miércoles 
+Martes y Jueves 
+7:00 – 8:30 
+ 
+ 
+8:45 – 10:15 
+ 
+ 
+10:30 – 12:00 
+ 
+ 
+12:15 – 1:45 
+ 
+ 
+2:00 – 3:30 
+ 
+ 
+3:45 – 5:15 
+ 
+ 
+5:30 – 7:00 
+ 
+ 
+ 
+Una vez concluida la asignación, el sistema debe reportar 
+1.​ Cuáles materias tuvieron secciones que se debieron cerrar por falta de profesores (y 
+cuántas secciones de esa materia fueron) 
+2.​ Cuáles materias tuvieron secciones que no se pudieron asignar por falta de salones 
+(y cuántas secciones de esa materia fueron) 
+3.​ Cuáles horarios quedaron con salones disponibles 
+ 
+y presentarle al usuario las siguientes opciones: 
+●​ Ver el horario de una materia 
+●​ Ver el horario de un profesor 
+●​ Ver salones asignados a una hora 
+●​ Guardar asignación de horarios en CSV 
+●​ Modificar asignación de horarios 
+4. Módulo de Modificación de horarios 
+Para modificar los horarios, el usuario deberá 
+1.​ Seleccionar una materia 
+2.​ Seleccionar una sección (identificada por su horario) 
+3.​ Seleccionar entre 
+a.​ cambiar el profesor de esa sección (en cuyo caso se muestra la lista de 
+profesores que aún están disponibles para esa materia) 
+b.​ cambiar el horario de esa sección (en cuyo caso se muestra las horas que 
+aún tienen salones disponibles, seguido de la lista de profesores disponibles) 
+ 
+Luego de la modificación, se debe volver al menú resultado de generar un horario. 
+5. Módulo de estadísticas 
+Para puntos adicionales, agregue una opción para generar gráficas con la librería matplotlib 
+que indiquen: 
+●​ Cuántos salones están ocupados a cada hora 
+●​ Qué porcentaje de su número total de materias permitidas se asignó para cada 
+profesor 
+●​ Qué porcentaje de las secciones se debieron cerrar para cada materia 
+ 
+Requerimientos: 
+●​
+El proyecto debe realizarse en parejas. 
+●​
+El proyecto debe utilizar los conceptos de la Programación Orientada a Objetos. 
+●​
+Debe realizar un diagrama de clases como plan de aplicación para el lunes, 2 de marzo 
+(lunes de semana 9) para discutirlo con su profesor o preparador. 
+●​
+El programa debe realizar validaciones sobre la entrada (e.g. si el programa pide un número 
+y el usuario escribe una letra, debe detectar y reportar el error, dandole otra oportunidad, en 
+vez de cerrarse por un error de Python) 
+Sobre la entrega: 
+●​
+Debe incluir el diagrama de clases de su aplicación en su entrega 
+●​
+Debe incluir su código en su entrega 
+●​
+El código debe estar correctamente identificado (cada archivo debe iniciar con un comentario 
+que incluya su nombre) 
+●​
+El código debe estar correctamente documentado (cada función y clase debe iniciar con un 
+docstring describiéndolo) 
+●​
+Debe entregar antes del 15 de marzo a medianoche (11:59 p.m. del domingo entre semanas 
+10 y 11)  
+Sobre la Defensa 
+●​
+Deberá realizar una defensa de su proyecto en la cual debe: 
+○​
+explicar lo que se hizo 
+○​
+demostrar su funcionamiento 
+○​
+contestar cualquier pregunta sobre el mismo, ya sea del profesor o de sus 
+compañeros. 
+●​
+Planifique y ensaye un tiempo para la defensa de aproximadamente 5 minutos para permitir a 
+todos los grupos defender dentro del horario de clase. 
+○​
+Practique respuestas de 30 segundos a preguntas como: “¿cómo se agrega una 
+sección?” durante la cual demuestre esta funcionalidad en la pantalla acompañado 
+de su explicación. 
+○​
+Tome en cuenta que su profesor o preparador puede indicarle el orden de las 
+funcionalidades a demostrar durante la defensa. 
+●​
+El programa debe correr en las computadoras del laboratorio. 
+○​
+Debe probar el programa en las computadoras del laboratorio, ya sea total o 
+parcialmente, antes de la defensa. 
+●​
+Ambos miembros deben tener una participación equitativa en la defensa. 
+Rúbrica 
+El proyecto se evalúa sobre una base de 100 puntos: 
+Diseño: 35 puntos (RA 5.1) 
+Diagrama de 
+Clases 
+El diagrama de clases se 
+corresponde con la 
+implementación. 
+10 puntos 
+El diagrama de clases 
+tiene algunos errores o 
+discrepancias con la 
+implementación. 
+5 puntos 
+No se entregó un 
+diagrama de clases 
+válido relacionado con la 
+implementación. 
+0 puntos 
+Profesores 
+El diseño de las clases se 
+adapta al problema 
+siguiendo buenas 
+prácticas de 
+programación. 
+10 puntos 
+El diseño de las clases no 
+es adecuado para el 
+problema o sigue malas 
+prácticas de 
+programación. 
+5 puntos 
+No se implementaron 
+clases en el módulo de 
+Profesores. 
+0 puntos 
+Materias 
+El diseño de las clases se 
+adapta al problema 
+siguiendo buenas 
+prácticas de 
+programación. 
+10 puntos 
+El diseño de las clases no 
+es adecuado para el 
+problema o sigue malas 
+prácticas de 
+programación. 
+5 puntos 
+No se implementaron 
+clases en el módulo de 
+Materias. 
+0 puntos 
+Generación 
+de horarios 
+El diseño de las clases se adapta al 
+problema. 
+5 puntos 
+No se implementaron clases en el 
+módulo de inventario. 
+0 puntos 
+Modificación 
+de horarios 
+El diseño de las clases se adapta al 
+problema siguiendo buenas prácticas de 
+programación. 
+5 puntos 
+No se implementaron clases en el 
+módulo de generación de horarios. 
+0 puntos 
+Cumplimiento de Requerimientos: 30 puntos 
+Documentación​
+(RA 5.2.1) 
+Hay un docstring 
+para cada función y 
+clase que explica 
+claramente sus 
+consideraciones de 
+eficiencia y los 
+comentarios son 
+claros y presentes 
+en todos los lugares 
+donde son 
+necesarios. 
+10 puntos 
+Faltan docstrings y/o 
+comentarios clave, o 
+carecen de 
+información 
+importante como sus 
+consideraciones de 
+eficiencia. 
+5 puntos 
+No hay 
+documentación 
+alguna 
+0 puntos 
+Acceso a la API 
+El código de acceso a 
+la API es correcto y 
+funcional. 
+10 puntos 
+El código de acceso a 
+la API omite pasos 
+fundamentales y/o no 
+funciona según lo 
+esperado. 
+5 puntos 
+No hay código de 
+acceso a la API. 
+0 puntos 
+Manejo de Archivos 
+La lectura y escritura 
+de archivos es 
+correcta y funcional. 
+10 puntos 
+La lectura y escritura 
+de archivos omite 
+pasos fundamentales 
+y/o no funciona según 
+lo esperado. 
+5 puntos 
+No hay código de 
+lectura ni escritura de 
+archivos. 
+0 puntos 
+Presentación del Proyecto: 30 puntos 
+Ejecución 
+El programa 
+permite 
+realizar 
+todas las 
+funcionalida
+des pedidas 
+sin errores. 
+20 puntos 
+El programa 
+tiene 
+suficiente 
+funcionalida
+d para 
+realizar la 
+simulación. 
+15 puntos 
+El programa 
+omite 
+funcionalida
+des 
+importantes 
+pero al 
+menos corre 
+sin errores. 
+10 puntos 
+El programa 
+da error al 
+intentar 
+ejecutarlo. 
+5 puntos 
+El programa 
+no corre. 
+0 puntos 
+Defensa​
+(RA 5.2.2) 
+El comportamiento 
+de la defensa 
+demuestra dominio 
+del proyecto 
+entregado. 
+10 puntos 
+La defensa muestra 
+falta de preparación 
+para explicar el 
+proyecto. 
+5 puntos 
+El estudiante no vino 
+a defensa. 
+0 puntos 
+ 
+Resultados de Aprendizaje 
+Las notas de la defensa y documentación (marcadas en negritas) serán usadas para 
+evaluar su Resultado de Aprendizaje 5.2 "Aplicación y adaptación de soluciones 
+tecnológicas", mientras que los criterios sobre el diseño (primeros 35 puntos) serán usados 
+para evaluar su Resultado de Aprendizaje 5.1 "Evaluación de soluciones implementadas". 
+ 
