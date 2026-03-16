@@ -1,5 +1,5 @@
 """
-Autor: Samuel Hernandez, Leoardo Zambrano, Manuel 
+Autor: Samuel Hernandez, Leonardo Zambrano, Manuel 
 Proyecto: Horarios de Clases
 Materia: Algoritmos y Programación (BPTSP05)
 
@@ -75,7 +75,7 @@ class Aplicacion:
                 "Módulo de Materias",
                 "Módulo de Generación de horarios",
                 "Módulo de Estadísticas (Bonus)",
-                "Guardar datos actuales (Opcional - extra)",
+                "Guardar datos actuales",
             ]
             sel = crear_menu("Menú de Módulos Fundamentales", opciones, funcion_volver=True)
             
